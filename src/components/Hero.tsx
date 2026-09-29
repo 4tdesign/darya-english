@@ -1,7 +1,65 @@
-import { motion, useReducedMotion } from "motion/react"
+import { motion, useInView, useReducedMotion } from "motion/react"
+import { useEffect, useRef, useState } from "react"
 import type { Dict } from "@/content"
 import daryaPhoto from "@/imports/____.jpg"
+import daryaLive from "@/imports/daria-live.mp4"
 import { EASE_OUT, HandNote, PenArrow, PenCircle, PenUnderline } from "./Pen"
+
+// Daria's photo that comes alive: a 6-second seamless loop (first and last
+// frames are the original photo). Starts after the reveal, pauses off-screen,
+// and is skipped entirely for people who prefer reduced motion.
+function LivePhoto({ alt, reduce }: { alt: string; reduce: boolean }) {
+  const wrapRef = useRef<HTMLDivElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const inView = useInView(wrapRef, { amount: 0.3 })
+  const [ready, setReady] = useState(false)
+  const [live, setLive] = useState(false)
+
+  useEffect(() => {
+    if (reduce) return
+    const id = setTimeout(() => setReady(true), 1600)
+    return () => clearTimeout(id)
+  }, [reduce])
+
+  useEffect(() => {
+    const v = videoRef.current
+    if (!v || !ready) return
+    if (inView) v.play().catch(() => {})
+    else v.pause()
+  }, [ready, inView])
+
+  return (
+    <motion.div
+      ref={wrapRef}
+      className="relative aspect-[4/5] w-full overflow-hidden rounded-[24px] shadow-[0_30px_60px_-30px_rgb(28_26_23/0.45)]"
+      initial={reduce ? undefined : { clipPath: "inset(100% 0% 0% 0% round 24px)" }}
+      animate={{ clipPath: "inset(0% 0% 0% 0% round 24px)" }}
+      transition={{ duration: 1.2, delay: 0.25, ease: EASE_OUT }}
+    >
+      <img
+        src={daryaPhoto}
+        alt={alt}
+        width={640}
+        height={640}
+        fetchPriority="high"
+        className="absolute inset-0 h-full w-full object-cover object-[50%_20%]"
+      />
+      {!reduce && (
+        <video
+          ref={videoRef}
+          src={daryaLive}
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+          onPlaying={() => setLive(true)}
+          className={`absolute inset-0 h-full w-full object-cover object-[50%_20%] transition-opacity duration-700 ${live ? "opacity-100" : "opacity-0"}`}
+        />
+      )}
+    </motion.div>
+  )
+}
 
 // The one orchestrated moment on the page: headline lines rise, the photo
 // uncovers, then the red pen underlines and annotates.
@@ -66,17 +124,7 @@ export function Hero({ t }: { t: Dict }) {
               animate={{ opacity: 1, rotate: -3.5 }}
               transition={{ duration: 1.1, delay: 0.35, ease: EASE_OUT }}
             />
-            <motion.img
-              src={daryaPhoto}
-              alt={t.hero.photoAlt}
-              width={640}
-              height={640}
-              fetchPriority="high"
-              className="relative aspect-[4/5] w-full rounded-[24px] object-cover object-[50%_20%] shadow-[0_30px_60px_-30px_rgb(28_26_23/0.45)]"
-              initial={reduce ? undefined : { clipPath: "inset(100% 0% 0% 0% round 24px)" }}
-              animate={{ clipPath: "inset(0% 0% 0% 0% round 24px)" }}
-              transition={{ duration: 1.2, delay: 0.25, ease: EASE_OUT }}
-            />
+            <LivePhoto alt={t.hero.photoAlt} reduce={reduce} />
 
             <div className="absolute -top-14 -left-4 flex items-start md:-top-16 md:-left-24">
               <HandNote delay={reduce ? 0 : 1.5} className="-rotate-6 text-[1.45rem] md:text-[1.7rem]">
