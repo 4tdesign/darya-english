@@ -1,191 +1,243 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-@import 'tailwindcss';
+@import "@fontsource-variable/inter/opsz.css";
+@import "@fontsource-variable/caveat";
+@import "tailwindcss";
 
+/*
+  Design tokens.
+  paper  - page background (the brand's warm white)
+  ink    - text
+  pen    - the teacher's red pen: the only accent colour on the site
+  grid   - the blue squares of a Russian school notebook
+*/
 @theme {
-  --color-parchment: #FAF7F0;
-  --color-parchment-dark: #F0EBE0;
-  --color-crimson: #C8173A;
-  --color-crimson-dark: #A01030;
-  --color-teal: #3D7A7A;
-  --color-teal-light: #E8F4F4;
-  --color-ink: #1C1A17;
-  --color-ink-muted: #5A5549;
-  --color-border: #D8D1C4;
-  --font-display: 'Inter', system-ui, sans-serif;
-  --font-serif: 'Inter', system-ui, sans-serif;
-  --font-sans: 'Inter', system-ui, sans-serif;
+  --color-paper: #faf7f0;
+  --color-paper-2: #f2ede3;
+  --color-sheet: #fdfcf8;
+  --color-ink: #1c1a17;
+  --color-ink-2: #55504a;
+  --color-ink-3: #8a8375;
+  --color-rule: #ddd6c9;
+  --color-pen: #c8173a;
+  --color-pen-dark: #a01030;
+  --color-grid: #9db8d9;
+  --color-tg: #229ed9;
+
+  --font-sans: "Inter Variable", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-hand: "Caveat Variable", "Caveat", "Segoe Print", "Comic Sans MS", cursive;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-* {
-  box-sizing: border-box;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-optical-sizing: auto;
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-pen);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-pen);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
 }
 
-html {
-  scroll-behavior: smooth;
+@layer components {
+  /* Large headline type: tight, optical-size display cut of Inter */
+  .display {
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+  }
+
+  /* Page of a school notebook: blue squares */
+  .notebook {
+    background-color: var(--color-sheet);
+    background-image:
+      linear-gradient(to bottom, color-mix(in srgb, var(--color-grid) 32%, transparent) 1px, transparent 1px),
+      linear-gradient(to right, color-mix(in srgb, var(--color-grid) 32%, transparent) 1px, transparent 1px);
+    background-size: 22px 22px;
+    background-position: -1px -1px;
+  }
+
+  .hand {
+    font-family: var(--font-hand);
+    font-weight: 600;
+    color: var(--color-pen);
+    line-height: 1.05;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3.25rem;
+    padding: 0 1.6rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.975rem;
+    letter-spacing: -0.005em;
+    transition:
+      background-color 0.25s ease,
+      color 0.25s ease,
+      border-color 0.25s ease,
+      transform 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:active {
+    transform: scale(0.97);
+  }
+  .btn-pen {
+    background: var(--color-pen);
+    color: #fff;
+  }
+  .btn-pen:hover {
+    background: var(--color-pen-dark);
+  }
+  .btn-ink {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  .btn-ink:hover {
+    background: var(--color-pen);
+  }
+  .btn-line {
+    border: 1.5px solid color-mix(in srgb, var(--color-ink) 22%, transparent);
+    color: var(--color-ink);
+  }
+  .btn-line:hover {
+    border-color: var(--color-ink);
+  }
+  .btn-line-light {
+    border: 1.5px solid rgb(255 255 255 / 0.25);
+    color: #fff;
+  }
+  .btn-line-light:hover {
+    border-color: #fff;
+  }
+
+  /* Text link with an underline that sweeps in on hover */
+  .sweep {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1.5px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.35s var(--ease-out-expo);
+  }
+  .sweep:hover,
+  .sweep[aria-current="true"] {
+    background-size: 100% 1.5px;
+  }
 }
 
-body {
-  background-color: #FAF7F0;
-  color: #1C1A17;
-  font-family: 'Inter', system-ui, sans-serif;
+/*
+  Soft coloured circles drifting slowly behind the page.
+  Radial gradients instead of filter: blur() - same softness, far cheaper on phones.
+*/
+@layer components {
+  .ambient {
+    position: absolute;
+    border-radius: 9999px;
+    will-change: transform;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+  .ambient-1 {
+    width: 62vmax;
+    height: 62vmax;
+    top: -18vmax;
+    left: -20vmax;
+    background: radial-gradient(closest-side, rgb(200 23 58 / 0.17), rgb(200 23 58 / 0.06) 55%, transparent);
+    animation-name: drift-1;
+    animation-duration: 34s;
+  }
+  .ambient-2 {
+    width: 58vmax;
+    height: 58vmax;
+    top: 10vh;
+    right: -22vmax;
+    background: radial-gradient(closest-side, rgb(61 122 122 / 0.2), rgb(61 122 122 / 0.07) 55%, transparent);
+    animation-name: drift-2;
+    animation-duration: 42s;
+  }
+  .ambient-3 {
+    width: 52vmax;
+    height: 52vmax;
+    bottom: -20vmax;
+    left: 12vw;
+    background: radial-gradient(closest-side, rgb(232 180 74 / 0.24), rgb(232 180 74 / 0.08) 55%, transparent);
+    animation-name: drift-3;
+    animation-duration: 38s;
+  }
+  .ambient-4 {
+    width: 44vmax;
+    height: 44vmax;
+    top: 38vh;
+    left: 38vw;
+    background: radial-gradient(closest-side, rgb(120 160 215 / 0.2), rgb(120 160 215 / 0.07) 55%, transparent);
+    animation-name: drift-4;
+    animation-duration: 50s;
+  }
 }
 
-/* ── Animations ───────────────────────────────────────────── */
-
-@keyframes blob-drift {
-  0%,100% { transform: translate(0,0) scale(1); }
-  33%      { transform: translate(80px,-60px) scale(1.18); }
-  66%      { transform: translate(-50px,40px) scale(0.88); }
+@keyframes drift-1 {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(14vw, 16vh, 0) scale(1.12); }
+}
+@keyframes drift-2 {
+  from { transform: translate3d(0, 0, 0) scale(1.05); }
+  to { transform: translate3d(-16vw, 22vh, 0) scale(0.92); }
+}
+@keyframes drift-3 {
+  from { transform: translate3d(0, 0, 0) scale(0.95); }
+  to { transform: translate3d(18vw, -20vh, 0) scale(1.1); }
+}
+@keyframes drift-4 {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(-20vw, -14vh, 0) scale(1.15); }
 }
 
-@keyframes float-a {
-  0%,100% { transform: rotate(-3deg) translateY(0px); }
-  50%      { transform: rotate(-3deg) translateY(-12px); }
-}
-@keyframes float-b {
-  0%,100% { transform: rotate(2.5deg) translateY(0px); }
-  50%      { transform: rotate(2.5deg) translateY(-8px); }
-}
-@keyframes float-c {
-  0%,100% { transform: rotate(2deg) translateY(0px); }
-  50%      { transform: rotate(2deg) translateY(-14px); }
-}
-@keyframes float-d {
-  0%,100% { transform: rotate(-1.5deg) translateY(0px); }
-  50%      { transform: rotate(-1.5deg) translateY(-10px); }
-}
-@keyframes float-e {
-  0%,100% { transform: rotate(3deg) translateY(0px); }
-  50%      { transform: rotate(3deg) translateY(-9px); }
-}
-@keyframes float-f {
-  0%,100% { transform: translateX(-50%) rotate(1deg) translateY(0px); }
-  50%      { transform: translateX(-50%) rotate(1deg) translateY(-11px); }
-}
+@media (prefers-reduced-motion: reduce) {
+  .ambient {
+    animation: none !important;
+  }
 
-@keyframes ken-burns {
-  0%   { transform: scale(1) translate(0,0); }
-  100% { transform: scale(1.12) translate(-2%, -1%); }
-}
-
-@keyframes fade-up {
-  from { opacity:0; transform:translateY(24px); }
-  to   { opacity:1; transform:translateY(0); }
-}
-
-@keyframes fade-in {
-  from { opacity:0; }
-  to   { opacity:1; }
-}
-
-@keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-@keyframes shimmer {
-  0%,100% { opacity:0.18; }
-  50%      { opacity:0.28; }
-}
-
-.animate-blob-drift { animation: blob-drift 7s ease-in-out infinite; }
-.animate-blob-drift-2 { animation: blob-drift 9s ease-in-out infinite reverse; }
-.animate-blob-drift-3 { animation: blob-drift 6s ease-in-out infinite 1s; }
-.animate-shimmer { animation: shimmer 4s ease-in-out infinite; }
-.animate-fade-up { animation: fade-up 0.7s ease both; }
-.animate-fade-in { animation: fade-in 1s ease both; }
-.animate-float-a { animation: float-a 5s ease-in-out infinite; }
-.animate-float-b { animation: float-b 6s ease-in-out infinite 0.5s; }
-.animate-float-c { animation: float-c 7s ease-in-out infinite 1s; }
-.animate-float-d { animation: float-d 5.5s ease-in-out infinite 1.5s; }
-.animate-float-e { animation: float-e 6.5s ease-in-out infinite 0.8s; }
-.animate-float-f { animation: float-f 7s ease-in-out infinite 0.3s; }
-.animate-ken-burns { animation: ken-burns 16s ease-in-out infinite alternate; }
-
-/* ── Marquee ──────────────────────────────────────────────── */
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-.animate-marquee { animation: marquee 28s linear infinite; }
-
-/* ── Reveal animations (triggered by JS class) ────────────── */
-@keyframes reveal-up {
-  from { opacity:0; transform: translateY(60px); }
-  to   { opacity:1; transform: translateY(0); }
-}
-@keyframes reveal-left {
-  from { opacity:0; transform: translateX(-80px); }
-  to   { opacity:1; transform: translateX(0); }
-}
-@keyframes reveal-right {
-  from { opacity:0; transform: translateX(80px); }
-  to   { opacity:1; transform: translateX(0); }
-}
-@keyframes reveal-scale {
-  from { opacity:0; transform: scale(0.85); }
-  to   { opacity:1; transform: scale(1); }
-}
-@keyframes word-reveal {
-  from { opacity:0; transform: translateY(100%); clip-path: inset(0 0 100% 0); }
-  to   { opacity:1; transform: translateY(0);    clip-path: inset(0 0 0% 0); }
-}
-@keyframes line-grow {
-  from { transform: scaleX(0); }
-  to   { transform: scaleX(1); }
-}
-@keyframes counter-up {
-  from { opacity:0; transform: translateY(20px); }
-  to   { opacity:1; transform: translateY(0); }
-}
-
-.in-view-up    { animation: reveal-up    0.8s cubic-bezier(.22,1,.36,1) both; }
-.in-view-left  { animation: reveal-left  0.8s cubic-bezier(.22,1,.36,1) both; }
-.in-view-right { animation: reveal-right 0.8s cubic-bezier(.22,1,.36,1) both; }
-.in-view-scale { animation: reveal-scale 0.9s cubic-bezier(.22,1,.36,1) both; }
-.in-view-word  { animation: word-reveal  0.7s cubic-bezier(.22,1,.36,1) both; }
-.in-view-line  { animation: line-grow    1s   cubic-bezier(.22,1,.36,1) both; }
-.in-view-count { animation: counter-up  0.6s cubic-bezier(.22,1,.36,1) both; }
-
-/* ── Animated banner layers ───────────────────────────────── */
-@keyframes pan-left {
-  0%   { transform: scale(1.12) translateX(0%); }
-  100% { transform: scale(1.12) translateX(-6%); }
-}
-@keyframes pan-right {
-  0%   { transform: scale(1.1) translateX(0%); }
-  100% { transform: scale(1.1) translateX(6%); }
-}
-@keyframes slide-bus {
-  0%   { transform: translateX(110%); }
-  100% { transform: translateX(-110%); }
-}
-@keyframes fade-cycle {
-  0%,100% { opacity:0; }
-  15%,85% { opacity:1; }
-}
-@keyframes text-shimmer {
-  0%   { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-.animate-pan-left  { animation: pan-left  18s ease-in-out infinite alternate; }
-.animate-pan-right { animation: pan-right 22s ease-in-out infinite alternate-reverse; }
-.animate-slide-bus { animation: slide-bus 14s linear infinite; }
-
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #D8D1C4; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #B8B1A4; }
-
-.font-display { font-family: 'Inter', system-ui, sans-serif; }
-.font-serif { font-family: 'Inter', system-ui, sans-serif; }
-
-/* Watercolor blobs */
-.blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.18;
-  pointer-events: none;
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }
