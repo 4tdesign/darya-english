@@ -5,14 +5,16 @@ import daryaPhoto from "@/imports/____.jpg"
 import daryaLive from "@/imports/daria-live.mp4"
 import { EASE_OUT, HandNote, PenArrow, PenCircle, PenUnderline } from "./Pen"
 
-// Daria's photo that comes alive: a 6-second seamless loop (first and last
-// frames are the original photo). Starts after the reveal, pauses off-screen,
-// and is skipped entirely for people who prefer reduced motion.
+// Daria's photo that comes alive once: a 6-second clip whose first and last
+// frames are the original photo. It plays a single time after the reveal, then
+// hands back to the still photo. Hovering the photo (mouse) plays it again.
+// Pauses off-screen; skipped for people who prefer reduced motion.
 function LivePhoto({ alt, reduce }: { alt: string; reduce: boolean }) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const inView = useInView(wrapRef, { amount: 0.3 })
   const [ready, setReady] = useState(false)
+  const [done, setDone] = useState(false)
   const [live, setLive] = useState(false)
 
   useEffect(() => {
@@ -21,16 +23,25 @@ function LivePhoto({ alt, reduce }: { alt: string; reduce: boolean }) {
     return () => clearTimeout(id)
   }, [reduce])
 
+  // First play: once, when the photo is on screen
   useEffect(() => {
     const v = videoRef.current
-    if (!v || !ready) return
+    if (!v || !ready || done) return
     if (inView) v.play().catch(() => {})
     else v.pause()
-  }, [ready, inView])
+  }, [ready, inView, done])
+
+  function replay() {
+    const v = videoRef.current
+    if (!v || !done || !v.paused) return
+    v.currentTime = 0
+    v.play().catch(() => {})
+  }
 
   return (
     <motion.div
       ref={wrapRef}
+      onMouseEnter={replay}
       className="relative aspect-[4/5] w-full overflow-hidden rounded-[24px] shadow-[0_30px_60px_-30px_rgb(28_26_23/0.45)]"
       initial={reduce ? undefined : { clipPath: "inset(100% 0% 0% 0% round 24px)" }}
       animate={{ clipPath: "inset(0% 0% 0% 0% round 24px)" }}
@@ -49,11 +60,14 @@ function LivePhoto({ alt, reduce }: { alt: string; reduce: boolean }) {
           ref={videoRef}
           src={daryaLive}
           muted
-          loop
           playsInline
           preload="auto"
           aria-hidden="true"
           onPlaying={() => setLive(true)}
+          onEnded={() => {
+            setLive(false)
+            setDone(true)
+          }}
           className={`absolute inset-0 h-full w-full object-cover object-[50%_20%] transition-opacity duration-700 ${live ? "opacity-100" : "opacity-0"}`}
         />
       )}
