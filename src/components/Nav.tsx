@@ -53,7 +53,7 @@ function LangSwitch({ lang, setLang, label }: { lang: Lang; setLang: (l: Lang) =
   )
 }
 
-export function Nav({ t, lang, setLang }: { t: Dict; lang: Lang; setLang: (l: Lang) => void }) {
+export function Nav({ t, lang, setLang, isBook = false }: { t: Dict; lang: Lang; setLang: (l: Lang) => void; isBook?: boolean }) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const active = useActiveSection()
@@ -81,7 +81,7 @@ export function Nav({ t, lang, setLang }: { t: Dict; lang: Lang; setLang: (l: La
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-5 md:h-[4.5rem] md:px-8">
-        <a href="#top" className="shrink-0 text-[1.15rem] font-semibold tracking-[-0.02em]" onClick={() => setOpen(false)}>
+        <a href="/" className="shrink-0 font-display text-[1.02rem] font-semibold tracking-[-0.03em]" onClick={() => setOpen(false)}>
           <span className="text-pen">English</span> with Daria
         </a>
 
@@ -89,7 +89,7 @@ export function Nav({ t, lang, setLang }: { t: Dict; lang: Lang; setLang: (l: La
           {links.map((l) => (
             <li key={l.id}>
               <a
-                href={`#${l.id}`}
+                href={`/#${l.id}`}
                 aria-current={active === l.id ? "true" : undefined}
                 className={`sweep py-1 text-[15px] font-medium transition-colors ${
                   active === l.id ? "text-ink" : "text-ink-2 hover:text-ink"
@@ -103,7 +103,7 @@ export function Nav({ t, lang, setLang }: { t: Dict; lang: Lang; setLang: (l: La
 
         <div className="flex items-center gap-3">
           <LangSwitch lang={lang} setLang={setLang} label={t.nav.langLabel} />
-          <a href="#contact" className="btn btn-pen hidden !min-h-10 !px-5 text-sm md:inline-flex">
+          <a href="/book" className={`btn btn-pen !min-h-10 !px-5 text-sm ${isBook ? "hidden" : "hidden md:inline-flex"}`}>
             {t.cta}
           </a>
           <button
@@ -150,7 +150,7 @@ export function Nav({ t, lang, setLang }: { t: Dict; lang: Lang; setLang: (l: La
                   transition={{ delay: 0.05 + i * 0.04, duration: 0.3 }}
                 >
                   <a
-                    href={`#${l.id}`}
+                    href={`/#${l.id}`}
                     onClick={() => setOpen(false)}
                     className="flex items-center justify-between border-b border-rule py-4 text-2xl font-semibold tracking-[-0.02em]"
                   >
@@ -160,7 +160,7 @@ export function Nav({ t, lang, setLang }: { t: Dict; lang: Lang; setLang: (l: La
                 </motion.li>
               ))}
               <li className="pt-6 md:hidden">
-                <a href="#contact" onClick={() => setOpen(false)} className="btn btn-pen w-full">
+                <a href="/book" onClick={() => setOpen(false)} className="btn btn-pen w-full">
                   {t.cta}
                 </a>
               </li>

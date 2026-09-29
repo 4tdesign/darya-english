@@ -9,7 +9,7 @@ export function Stats({ t, lang }: { t: Dict; lang: Lang }) {
     <section className="bg-ink text-paper">
       <div className="mx-auto grid max-w-6xl gap-14 px-5 py-20 md:grid-cols-12 md:gap-8 md:px-8 md:py-28">
         <div className="md:col-span-6">
-          <h2 className="display text-[clamp(2.6rem,6.4vw,5rem)]">
+          <h2 className="display text-[clamp(2.1rem,4.8vw,3.9rem)]">
             {t.stats.title[0]}
             <br />
             <PenUnderline>{t.stats.title[1]}</PenUnderline>
@@ -20,7 +20,7 @@ export function Stats({ t, lang }: { t: Dict; lang: Lang }) {
               <TelegramIcon className="h-5 w-5" />
               @englishwithDariaC
             </a>
-            <a href="#contact" className="btn btn-line-light">
+            <a href="/book" className="btn btn-line-light">
               {t.stats.book}
             </a>
           </div>
@@ -30,7 +30,7 @@ export function Stats({ t, lang }: { t: Dict; lang: Lang }) {
           {t.stats.items.map((s) => (
             <div key={s.label} className="flex items-baseline justify-between gap-6 border-t border-paper/15 py-5 first:border-t-0 md:py-6">
               <dt className="order-2 max-w-[9rem] text-right text-[15px] leading-snug text-paper/55">{s.label}</dt>
-              <dd className="display order-1 text-[clamp(3rem,7vw,5.25rem)] leading-none">
+              <dd className="display order-1 text-[clamp(2.4rem,4.8vw,3.9rem)] leading-none">
                 <Counter to={s.n} suffix={s.suffix} locale={locale} />
               </dd>
             </div>

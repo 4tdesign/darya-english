@@ -3,14 +3,13 @@ import { useRef } from "react"
 import type { Dict } from "@/content"
 import { LINKS } from "@/content"
 import mama1 from "@/imports/mama1.jpg"
-import { TelegramIcon, VkIcon } from "./Icons"
 import { HandNote, MugDoodle, PenArrow, PenStrike, PenTick, PenUnderline } from "./Pen"
 
 // The club section is laid out as a page of a school notebook: blue squares,
 // a red margin line, and the teacher's red-pen marks.
 
 function BlockTitle({ children }: { children: React.ReactNode }) {
-  return <h3 className="text-[clamp(1.75rem,3.4vw,2.5rem)] leading-tight font-semibold tracking-[-0.028em]">{children}</h3>
+  return <h3 className="font-display text-[clamp(1.4rem,2.6vw,1.95rem)] leading-tight font-semibold tracking-[-0.025em]">{children}</h3>
 }
 
 function Week({ t }: { t: Dict }) {
@@ -73,7 +72,7 @@ export function Club({ t }: { t: Dict }) {
               {c.hashtag}
             </a>
             <div className="relative mt-5">
-              <h2 className="display max-w-[11ch] text-[clamp(3rem,8.4vw,6.6rem)]">{c.title}</h2>
+              <h2 className="display text-[clamp(2.2rem,5.6vw,4.3rem)]">{c.title}</h2>
               <MugDoodle className="absolute -top-3 right-0 h-20 w-20 md:-top-6 md:right-4 md:h-28 md:w-28" delay={0.2} />
             </div>
             <HandNote delay={0.5} className="mt-3 -rotate-3 text-[1.7rem] md:text-[2rem]">
@@ -155,7 +154,7 @@ export function Club({ t }: { t: Dict }) {
           <div className="mt-10 grid gap-12 md:grid-cols-2">
             {c.notHere.map((n, i) => (
               <div key={n.struck}>
-                <p className="text-[clamp(2rem,4.6vw,3.25rem)] leading-tight font-semibold tracking-[-0.03em] text-ink/80">
+                <p className="font-display text-[clamp(1.5rem,3.4vw,2.5rem)] leading-tight font-semibold tracking-[-0.03em] text-ink/80">
                   <PenStrike delay={0.2 + i * 0.25}>{n.struck}</PenStrike>
                 </p>
                 <p className="mt-4 max-w-md text-lg leading-relaxed text-ink-2">{n.text}</p>
@@ -210,24 +209,22 @@ export function Club({ t }: { t: Dict }) {
                   <div className="mt-8 min-h-[1.75rem] text-lg text-paper/55">
                     {p.old && <PenStrike delay={0.3}>{p.old}</PenStrike>}
                   </div>
-                  <p className="display text-[clamp(2.6rem,4.4vw,3.4rem)] leading-none">{p.price}</p>
+                  <p className="display text-[clamp(1.9rem,2.9vw,2.5rem)] leading-none">{p.price}</p>
                   <p className={`mt-2 min-h-[1.5rem] text-[15px] ${best ? "text-paper/55" : "text-ink-3"}`}>{p.per}</p>
-                  <p className={`mt-8 border-t pt-5 text-[15px] ${best ? "border-paper/15 text-paper/75" : "border-ink/10 text-ink-2"}`}>
-                    {p.note}
-                  </p>
+                  <div className={`mt-8 flex items-center justify-between gap-3 border-t pt-5 text-[15px] ${best ? "border-paper/15 text-paper/75" : "border-ink/10 text-ink-2"}`}>
+                    <span>{p.note}</span>
+                    <a href={`/book?service=club&plan=${p.id}`} className={`sweep shrink-0 font-semibold ${best ? "text-paper" : "text-pen"}`}>
+                      {c.choose}
+                    </a>
+                  </div>
                 </div>
               )
             })}
           </div>
           <p className="mt-8 max-w-xl text-lg leading-relaxed text-ink-2">{c.priceNote}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href={LINKS.telegram} target="_blank" rel="noopener noreferrer" className="btn btn-pen">
-              <TelegramIcon />
+            <a href="/book?service=club" className="btn btn-pen">
               {c.join}
-            </a>
-            <a href={LINKS.vk} target="_blank" rel="noopener noreferrer" className="btn btn-line bg-sheet">
-              <VkIcon />
-              {c.joinVk}
             </a>
           </div>
         </div>

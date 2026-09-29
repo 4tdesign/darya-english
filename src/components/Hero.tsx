@@ -33,7 +33,7 @@ export function Hero({ t }: { t: Dict }) {
             {t.hero.kicker}
           </motion.p>
 
-          <h1 className="display text-[clamp(2.7rem,7.4vw,5.9rem)]">
+          <h1 className="display text-[clamp(2.05rem,5.5vw,4.5rem)]">
             {t.hero.lines.map((line, i) => (
               <span key={line} className="-mb-[0.26em] block overflow-hidden pb-[0.26em]">
                 <motion.span className="block" {...rise(0.12 + i * 0.09)}>
@@ -48,7 +48,7 @@ export function Hero({ t }: { t: Dict }) {
           </motion.p>
 
           <motion.div {...fade(0.55)} className="mt-10 flex flex-wrap gap-3">
-            <a href="#contact" className="btn btn-pen">
+            <a href="/book" className="btn btn-pen">
               {t.cta}
             </a>
             <a href="#courses" className="btn btn-line">

@@ -14,7 +14,7 @@ export function About({ t }: { t: Dict }) {
       <div className="mx-auto grid max-w-6xl gap-12 px-5 md:grid-cols-12 md:gap-8 md:px-8">
         <div className="md:col-span-5">
           <p className="text-[15px] font-medium text-ink-2">{a.title}</p>
-          <h2 className="display mt-4 text-[clamp(2.6rem,6vw,4.75rem)]">{a.name}</h2>
+          <h2 className="display mt-4 text-[clamp(2rem,4.2vw,3.3rem)]">{a.name}</h2>
           <p className="mt-6 flex items-center gap-2 text-[15px] font-medium text-ink-2">
             <PinIcon className="h-[18px] w-[18px] text-pen" />
             {a.city}
@@ -45,7 +45,7 @@ export function Courses({ t }: { t: Dict }) {
     <section id="courses" className="border-t border-rule bg-paper-2/45 py-24 md:py-36">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <div className="grid gap-6 md:grid-cols-12 md:gap-8">
-          <h2 className="display text-[clamp(2.4rem,5.6vw,4.4rem)] md:col-span-7">{c.title}</h2>
+          <h2 className="display text-[clamp(1.9rem,4.2vw,3.3rem)] md:col-span-7">{c.title}</h2>
           <p className="max-w-md text-lg leading-relaxed text-ink-2 md:col-span-4 md:col-start-9 md:self-end">{c.sub}</p>
         </div>
 
@@ -89,7 +89,7 @@ export function Quote({ t }: { t: Dict }) {
     <section className="overflow-hidden py-24 md:py-40">
       <figure className="mx-auto max-w-6xl px-5 md:px-8">
         <HandNote className="-rotate-2 text-[clamp(1.6rem,3.2vw,2.5rem)]">{q.note}</HandNote>
-        <blockquote lang="en" className="display mt-5 max-w-[17ch] text-[clamp(2.3rem,6.2vw,5.2rem)] leading-[1.04]">
+        <blockquote lang="en" className="display mt-5 max-w-[24ch] text-[clamp(1.7rem,4.2vw,3.5rem)] leading-[1.15]">
           “{q.text}”
         </blockquote>
         <figcaption className="mt-10 text-lg text-ink-2">{q.author}</figcaption>
@@ -124,7 +124,7 @@ export function Reviews({ t }: { t: Dict }) {
   return (
     <section id="reviews" className="border-t border-rule py-24 md:py-36">
       <div ref={topRef} className="mx-auto max-w-6xl scroll-mt-24 px-5 md:px-8">
-        <h2 className="display max-w-[14ch] text-[clamp(2.4rem,5.6vw,4.4rem)]">{r.title}</h2>
+        <h2 className="display max-w-[18ch] text-[clamp(1.9rem,4.2vw,3.3rem)]">{r.title}</h2>
 
         <div className="mt-14 columns-1 gap-5 md:columns-2 lg:columns-3">
           <AnimatePresence initial={false}>
@@ -177,8 +177,11 @@ export function Contact({ t }: { t: Dict }) {
     <section id="contact" className="bg-ink py-24 text-paper md:py-36">
       <div className="mx-auto grid max-w-6xl gap-14 px-5 md:grid-cols-12 md:gap-8 md:px-8">
         <div className="md:col-span-5">
-          <h2 className="display text-[clamp(2.6rem,6vw,4.75rem)]">{c.title}</h2>
+          <h2 className="display text-[clamp(2rem,4.4vw,3.5rem)]">{c.title}</h2>
           <p className="mt-6 max-w-sm text-lg leading-relaxed text-paper/65">{c.sub}</p>
+          <a href="/book" className="btn btn-pen mt-8">
+            {c.book}
+          </a>
           <p className="mt-8 flex items-center gap-2 text-[15px] text-paper/55">
             <PinIcon className="h-[18px] w-[18px]" />
             {c.where}
@@ -220,7 +223,7 @@ export function Footer({ t }: { t: Dict }) {
   return (
     <footer className="border-t border-paper/10 bg-ink pb-28 text-paper md:pb-0">
       <div className="mx-auto flex max-w-6xl flex-col gap-4 px-5 py-8 text-sm text-paper/50 md:flex-row md:items-center md:justify-between md:px-8">
-        <span className="text-base font-semibold tracking-[-0.02em] text-paper">
+        <span className="font-display text-base font-semibold tracking-[-0.03em] text-paper">
           <span className="text-pen">English</span> with Daria
         </span>
         <span>
@@ -265,7 +268,7 @@ export function MobileCta({ t }: { t: Dict }) {
           transition={{ duration: 0.45, ease: EASE_OUT }}
           className="fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-40 flex gap-2 rounded-full bg-ink p-1.5 shadow-[0_16px_40px_-12px_rgb(28_26_23/0.55)] md:hidden"
         >
-          <a href="#contact" className="btn btn-pen !min-h-12 flex-1">
+          <a href="/book" className="btn btn-pen !min-h-12 flex-1">
             {t.mobileCta}
           </a>
           <a

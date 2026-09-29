@@ -1,4 +1,5 @@
-@import "@fontsource-variable/inter/opsz.css";
+@import "@fontsource-variable/unbounded";
+@import "@fontsource-variable/onest";
 @import "@fontsource-variable/caveat";
 @import "tailwindcss";
 
@@ -22,7 +23,8 @@
   --color-grid: #9db8d9;
   --color-tg: #229ed9;
 
-  --font-sans: "Inter Variable", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: "Onest Variable", "Onest", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Unbounded Variable", "Unbounded", "Onest Variable", system-ui, sans-serif;
   --font-hand: "Caveat Variable", "Caveat", "Segoe Print", "Comic Sans MS", cursive;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -39,8 +41,6 @@
     background-color: var(--color-paper);
     color: var(--color-ink);
     font-family: var(--font-sans);
-    font-optical-sizing: auto;
-    font-feature-settings: "cv11", "ss01";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -69,11 +69,12 @@
 }
 
 @layer components {
-  /* Large headline type: tight, optical-size display cut of Inter */
+  /* Headline type: Unbounded - wide, round, confident */
   .display {
-    font-weight: 700;
-    letter-spacing: -0.035em;
-    line-height: 1.02;
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.08;
   }
 
   /* Page of a school notebook: blue squares */
